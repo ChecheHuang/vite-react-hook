@@ -1,0 +1,37 @@
+.login-container {
+    width: 100vw;
+    height: 100vh;
+    background-image: url("https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .login-wrap {
+        position: fixed;
+        left: 40px;
+        top: 40px;
+        right: 40px;
+        bottom: 40px;
+        background-color: rgba(0, 0, 0, .5);
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, .05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .login-form {
+            text-align: center;
+            .ant-form-item-explain-error{
+                color: white;
+            }
+            img {
+                width: 100px;
+            }
+
+            h1 {
+                color: white;
+                font-size: 36px;
+                padding: 10px 0 20px;
+            }
+        }
+    }
+
+}
