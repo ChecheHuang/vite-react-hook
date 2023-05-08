@@ -31,3 +31,14 @@ Mock.mock("/api/login", "post", (options) => {
     };
   }
 });
+Mock.mock("/api/test", "post", (options) => {
+  return {
+    code: 401,
+    status: "error",
+    message: "帳號或密碼錯誤",
+  };
+  return {
+    status: "success",
+    message: "測試成功",
+  };
+});

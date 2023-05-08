@@ -33,7 +33,6 @@ request.interceptors.request.use((config) => {
 //響應攔截
 request.interceptors.response.use((response: AxiosResponse) => {
   //請求後
-  console.log(response);
   if (response.data.status === "success") {
     return response.data;
   }
@@ -43,34 +42,51 @@ request.interceptors.response.use((response: AxiosResponse) => {
     return Promise.reject(error);
   };
 
-export const http = {
-  get<T>(url: string, data?: object): Promise<T> {
-    return request.get(url, data);
-  },
-  post<T>(
+export type MethodType = "get" | "post" | "put" | "delete" | "patch";
+type HttpMethodMap = {
+  [key in MethodType]: <T>(
     url: string,
     data?: object,
     config?: AxiosRequestConfig
-  ): Promise<Result<T>> {
-    return request.post(url, data, config);
-  },
-  patch<T>(
-    url: string,
-    data?: object,
-    config?: AxiosRequestConfig
-  ): Promise<Result<T>> {
-    return request.patch(url, data, config);
-  },
-  put<T>(
-    url: string,
-    data?: object,
-    config?: AxiosRequestConfig
-  ): Promise<Result<T>> {
-    return request.put(url, data, config);
-  },
-  delete<T>(url: string, data?: object): Promise<Result<T>> {
-    return request.delete(url, data);
-  },
+  ) => Promise<Result<T>>;
 };
-
+export const http: HttpMethodMap = {
+  get: request.get,
+  post: request.post,
+  patch: request.patch,
+  put: request.put,
+  delete: request.delete,
+};
 export default request;
+
+
+// export const http = {
+//   get<T>(url: string, data?: object): Promise<T> {
+//     return request.get(url, data);
+//   },
+//   post<T>(
+//     url: string,
+//     data?: object,
+//     config?: AxiosRequestConfig
+//   ): Promise<Result<T>> {
+//     return request.post(url, data, config);
+//   },
+//   patch<T>(
+//     url: string,
+//     data?: object,
+//     config?: AxiosRequestConfig
+//   ): Promise<Result<T>> {
+//     return request.patch(url, data, config);
+//   },
+//   put<T>(
+//     url: string,
+//     data?: object,
+//     config?: AxiosRequestConfig
+//   ): Promise<Result<T>> {
+//     return request.put(url, data, config);
+//   },
+//   delete<T>(url: string, data?: object): Promise<Result<T>> {
+//     return request.delete(url, data);
+//   },
+// };
+

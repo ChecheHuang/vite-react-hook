@@ -1,9 +1,25 @@
 import React from "react";
 import "./login.scss";
 import Form from "./components/Form";
+import MyButton, { Request } from "@/components/Button";
+
 const Login: React.FC = () => {
+  const request: Request = {
+    url: "/test",
+    method: "post",
+  };
+
+  const handleClick = (result: object, error?: Error): void => {
+    if (error) {
+      console.error(error);
+    } else {
+      console.log("result", result);
+    }
+  };
+
   return (
     <div className="login-container">
+      <MyButton request={request} onClick={handleClick} />
       <div className="login-wrap">
         <div className="login-form">
           <img
