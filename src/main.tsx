@@ -1,17 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App.tsx";
 import "antd/dist/antd.css";
 import { Provider } from "react-redux";
 import store from "@/store";
-const loadMock = async () => {
-  if (import.meta.env.MODE === "development") {
+(async () => {
+  if (import.meta.env.MODE === "mock") {
     console.log("有引入 mock");
     await import("./mock");
+    return
   }
-};
-loadMock();
+  console.log("沒有引入mock")
+})()
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
   <Provider store={store}>

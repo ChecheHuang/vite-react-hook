@@ -1,0 +1,13 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+$red: red;
+
+button {
+    padding: 10px;
+
+    &.active {
+        padding: 20px;
+    }
+}

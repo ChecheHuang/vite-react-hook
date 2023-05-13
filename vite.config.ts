@@ -2,22 +2,23 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
-  const baseConfig = {
-    plugins: [react()],
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "./src"),
+const baseConfig = {
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "./src/index.scss";',
       },
     },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: '@import "./src/styles/sassConfig.scss";',
-        },
-      },
-    },
-  };
+  },
+};
+
+export default defineConfig(({ mode }) => {
   if (mode === "production") {
     return {
       ...baseConfig,
