@@ -1,4 +1,4 @@
-import { HashRouter, useRoutes } from "react-router-dom";
+import {  useRoutes } from "react-router-dom";
 import AuthRouter from "@/components/AuthRouter";
 import router from "@/router";
 const Routes = () => {
@@ -8,11 +8,9 @@ const Routes = () => {
 
 function App() {
   return (
-    <HashRouter>
-      <AuthRouter>
-        <Routes />
-      </AuthRouter>
-    </HashRouter>
+    <AuthRouter>
+      <Routes />
+    </AuthRouter>
   );
 }
 

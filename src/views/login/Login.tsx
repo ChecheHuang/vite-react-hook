@@ -1,6 +1,6 @@
 import React from "react";
 import "./login.scss";
-import Form from "./components/Form";
+import Form from "./components/Form.tsx";
 import MyButton, { Request } from "@/components/Button";
 
 const Login: React.FC = () => {
@@ -19,7 +19,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="login-container">
-      <MyButton request={request} onClick={handleClick} />
+      {/* <MyButton request={request} onClick={handleClick} /> */}
       <div className="login-wrap">
         <div className="login-form">
           <img

@@ -1,7 +1,8 @@
 import "./layout.scss";
 import { Outlet } from "react-router-dom";
-import Aside from "./Aside.jsx";
+import Aside from "./components/Aside.js";
 import { useAppSelector } from "@/store/hook";
+import Header from "./components/Headeer.js";
 const Layout: React.FC = () => {
  const tokenState = useAppSelector((state) => state.token);
   // console.log(tokenState);
@@ -11,7 +12,7 @@ const Layout: React.FC = () => {
         <Aside />
       </aside>
       <section>
-        <header>header</header>
+        <Header/>
         <main>
           <Outlet />
         </main>
