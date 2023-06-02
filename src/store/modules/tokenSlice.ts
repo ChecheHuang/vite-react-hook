@@ -1,13 +1,32 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getCookies } from "@/utils/cookies";
 interface TokenState {
   token: string;
+  route?: RoleData;
+  user?: User;
   pending: boolean | null;
   error: boolean;
 }
+interface RouteItem {
+  label?: string;
+  hidden?: boolean;
+  accessRole?: UserRole[];
+}
+export interface RoleData {
+  [path: string]: RouteItem;
+}
+type UserRole = "ADMIN" | "USER";
+export interface User {
+  username: string;
+  role: UserRole;
+}
+const storedData = localStorage.getItem("data");
+const data = storedData ? JSON.parse(storedData) : null;
+
 
 const initialState: TokenState = {
-  token: getCookies("token") || "",
+  token: data?.token,
+  route:data?.route,
+  user:data?.user,
   pending: null,
   error: false,
 };
@@ -19,9 +38,19 @@ export const tokenSlice = createSlice({
     updateStart(state) {
       state.pending = true;
     },
-    updateSuccess(state, action: PayloadAction<string>) {
+    updateSuccess(
+      state,
+      action: PayloadAction<{
+        token?: string;
+        route?: RoleData;
+        user?: User;
+      }>
+    ) {
+      const { token, route, user } = action.payload;
       state.pending = false;
-      state.token = action.payload;
+      if (token) state.token = token;
+      if (route) state.route = route;
+      if (user) state.user = user;
     },
     updateError(state) {
       state.error = true;

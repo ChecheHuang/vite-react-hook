@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  updateStart,
-  updateSuccess,
-  updateError,
-} from "@/store/modules/tokenSlice";
-import { useAppDispatch } from "@/store/hook";
 
 interface User {
   id: number;
@@ -15,16 +9,7 @@ interface User {
   avatar: string;
 }
 function Home() {
-  const dispatch = useAppDispatch();
   const [users, setUsers] = useState<User[]>([]);
-  const handleUpdate = async () => {
-    dispatch(updateStart());
-    try {
-      dispatch(updateSuccess("token"));
-    } catch (err) {
-      dispatch(updateError());
-    }
-  };
    useEffect(() => {
      axios
        .get<{ users: User[] }>("/api/users")
@@ -36,7 +21,7 @@ function Home() {
        });
    }, []);
   return (
-    <div onClick={handleUpdate}>
+    <div >
       Home
       <div>
         {users.map((user) => (

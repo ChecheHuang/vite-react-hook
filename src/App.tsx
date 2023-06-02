@@ -1,6 +1,7 @@
-import {  useRoutes } from "react-router-dom";
-import AuthRouter from "@/components/AuthRouter";
+import { useRoutes } from "react-router-dom";
+import AuthRouter from "@/providers/AuthRouter";
 import router from "@/router";
+import ToastProvider from "./providers/ToastProvider";
 const Routes = () => {
   const routes = useRoutes(router);
   return routes;
@@ -8,9 +9,11 @@ const Routes = () => {
 
 function App() {
   return (
-    <AuthRouter>
-      <Routes />
-    </AuthRouter>
+    <ToastProvider>
+      <AuthRouter>
+        <Routes />
+      </AuthRouter>
+    </ToastProvider>
   );
 }
 

@@ -1,22 +1,38 @@
-import { useState } from "react";
-import { router_item, AntdRouterItem } from "@/router";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu } from "antd";
 import type { MenuProps } from "antd";
+import { router, RouterItem } from "@/router";
+import { useAppSelector } from "@/store/hook";
+import { RoleData } from "@/store/modules/tokenSlice";
+
+
+interface AntdRouterItem extends RouterItem {
+  key: string;
+  type: string;
+  children?: AntdRouterItem[];
+}
+
 const storageSelectKeys = JSON.parse(
   sessionStorage.getItem("selectKeys") || "[]"
 );
-const storageOpenKeys = JSON.parse(
-  sessionStorage.getItem("openKeys") || "[]"
-);
-// console.log(JSON.stringify(router_item));
+const storageOpenKeys = JSON.parse(sessionStorage.getItem("openKeys") || "[]");
 function Aside() {
-  const [router] = useState<AntdRouterItem[]>(router_item);
+  const { user, route: accessRoute = {} } = useAppSelector(
+    (state) => state.token
+  );
+  const [routerItem, setRouterItem] = useState<AntdRouterItem[]>([]);
   const [selectKeys, setSelectKeys] = useState<string[]>(storageSelectKeys);
   const [openKeys, setOpenKeys] = useState<string[]>(storageOpenKeys);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if(!user)return
+    setRouterItem(convertRouter(router, accessRoute, user.role));
+  }, [user, accessRoute]);
+
   const handleLink: MenuProps["onClick"] = (e) => {
-    console.log(e);
+    // console.log(e);
     navigate(e.key);
     sessionStorage.setItem("selectKeys", JSON.stringify(e.keyPath));
     setSelectKeys(e.keyPath as string[]);
@@ -34,10 +50,42 @@ function Aside() {
         theme="dark"
         defaultSelectedKeys={selectKeys}
         defaultOpenKeys={openKeys}
-        items={router}
+        items={routerItem}
       />
     </>
   );
 }
 
 export default Aside;
+
+function convertRouter(
+  config: RouterItem[],
+  accessRoute: RoleData,
+  role: "ADMIN" | "USER",
+  parentKey = ""
+): AntdRouterItem[] {
+  return config.reduce((result: AntdRouterItem[], item: RouterItem) => {
+    if (!item.hidden) {
+      const key = parentKey ? `${parentKey}/${item.path}` : item.path;
+      const hidden = accessRoute[key].hidden
+        ? accessRoute[key].hidden
+        : !accessRoute[key]?.accessRole?.includes(role) || false;
+      const newItem: AntdRouterItem = {
+        ...item,
+        key,
+        type: "",
+        hidden,
+      } as AntdRouterItem;
+      if (newItem.children) {
+        newItem.children = convertRouter(
+          newItem.children,
+          accessRoute,
+          role,
+          key
+        );
+      }
+      result.push(newItem);
+    }
+    return result;
+  }, []);
+}
