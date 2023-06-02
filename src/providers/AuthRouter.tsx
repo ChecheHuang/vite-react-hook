@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/store/hook";
 import useToast from "@/hooks/useToast";
 
 const AuthRouter: React.FC<{ children: JSX.Element }> = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -14,6 +15,13 @@ const AuthRouter: React.FC<{ children: JSX.Element }> = ({ children }) => {
   } = useAppSelector((state) => state.token);
 
   useEffect(() => {
+    if (pathname === "/login" && reduxToken) {
+      return navigate("/layout/user");
+    }
+    if (!reduxToken) {
+      return navigate("/login");
+    }
+
     if (route) {
       const routeItem = route[pathname];
       if (
@@ -23,19 +31,14 @@ const AuthRouter: React.FC<{ children: JSX.Element }> = ({ children }) => {
         const isAllow = routeItem.accessRole?.includes(user.role);
         if (!isAllow) {
           showToast("error", "沒有權限訪問");
-          navigate(-1); 
+          navigate(-1);
         }
       }
     }
-  }, [pathname, route, showToast, user, navigate]);
+    setIsLoading(false);
+  }, [pathname, route, showToast, user, navigate, reduxToken]);
 
-  if (pathname === "/login" && !reduxToken) return children;
-
-  if (!reduxToken) {
-    return <Navigate to="/login" />;
-  }
-
-  return children;
+  return <>{isLoading ? <div>Loading</div> : children}</>;
 };
 
 export default AuthRouter;

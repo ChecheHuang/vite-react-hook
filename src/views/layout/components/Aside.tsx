@@ -7,9 +7,11 @@ import { useAppSelector } from "@/store/hook";
 import { RoleData } from "@/store/modules/tokenSlice";
 
 
-interface AntdRouterItem extends RouterItem {
+interface AntdRouterItem  {
   key: string;
   type: string;
+  label:string;
+  hidden: boolean;
   children?: AntdRouterItem[];
 }
 
@@ -32,7 +34,6 @@ function Aside() {
   }, [user, accessRoute]);
 
   const handleLink: MenuProps["onClick"] = (e) => {
-    // console.log(e);
     navigate(e.key);
     sessionStorage.setItem("selectKeys", JSON.stringify(e.keyPath));
     setSelectKeys(e.keyPath as string[]);
@@ -65,27 +66,31 @@ function convertRouter(
   parentKey = ""
 ): AntdRouterItem[] {
   return config.reduce((result: AntdRouterItem[], item: RouterItem) => {
-    if (!item.hidden) {
-      const key = parentKey ? `${parentKey}/${item.path}` : item.path;
-      const hidden = accessRoute[key].hidden
-        ? accessRoute[key].hidden
-        : !accessRoute[key]?.accessRole?.includes(role) || false;
-      const newItem: AntdRouterItem = {
-        ...item,
-        key,
-        type: "",
-        hidden,
-      } as AntdRouterItem;
-      if (newItem.children) {
-        newItem.children = convertRouter(
-          newItem.children,
-          accessRoute,
-          role,
-          key
-        );
-      }
-      result.push(newItem);
+    const key = parentKey ? `${parentKey}/${item.path}` : item.path;
+    const hidden =
+      item.hidden ||
+      accessRoute[key]?.hidden ||
+      !accessRoute[key]?.accessRole?.includes(role);
+
+    if (hidden) {
+      // 如果項目被標記為隱藏，則不包含它
+      return result;
     }
+
+    const newItem: AntdRouterItem = {
+      key,
+      type: "",
+      hidden,
+      label: item.label,
+    };
+
+    if (item.children) {
+      newItem.children = convertRouter(item.children, accessRoute, role, key);
+    }
+
+    result.push(newItem);
+
     return result;
   }, []);
 }
+

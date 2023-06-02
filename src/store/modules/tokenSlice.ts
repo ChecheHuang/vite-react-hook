@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface TokenState {
-  token: string;
+  token?: string;
   route?: RoleData;
   user?: User;
   pending: boolean | null;
@@ -22,11 +22,10 @@ export interface User {
 const storedData = localStorage.getItem("data");
 const data = storedData ? JSON.parse(storedData) : null;
 
-
 const initialState: TokenState = {
   token: data?.token,
-  route:data?.route,
-  user:data?.user,
+  route: data?.route,
+  user: data?.user,
   pending: null,
   error: false,
 };
@@ -48,9 +47,9 @@ export const tokenSlice = createSlice({
     ) {
       const { token, route, user } = action.payload;
       state.pending = false;
-      if (token) state.token = token;
-      if (route) state.route = route;
-      if (user) state.user = user;
+      state.token = token;
+      state.route = route;
+      state.user = user;
     },
     updateError(state) {
       state.error = true;

@@ -16,10 +16,8 @@ const LoginForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const {showToast} = useToast()
   const onFinish = async (values: { username: string; password: string }) => {
-    // console.log("Success:", values);
     try {
       dispatch(updateStart());
-      // const data = await login(values);
       const {
         data,
       } = await login(values);
