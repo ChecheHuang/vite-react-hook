@@ -1,11 +1,11 @@
-.login-container {
+.loginContainer {
     width: 100vw;
     height: 100vh;
     background-image: url("https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
     background-repeat: no-repeat;
     background-size: cover;
 
-    .login-wrap {
+    .loginWrap {
         position: fixed;
         left: 40px;
         top: 40px;
@@ -17,7 +17,7 @@
         align-items: center;
         justify-content: center;
 
-        .login-form {
+        .loginForm {
             text-align: center;
             .ant-form-item-explain-error{
                 color: white;

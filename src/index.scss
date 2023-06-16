@@ -1,7 +1,13 @@
-*{
+// @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
+
 $red: red;
 
 button {
@@ -10,4 +16,22 @@ button {
     &.active {
         padding: 20px;
     }
+}
+
+.mybtn {
+    color: aqua;
+}
+
+@keyframes loader-anim {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 100%;
+    }
+}
+
+.animate-loader {
+    animation: loader-anim 3s infinite;
 }

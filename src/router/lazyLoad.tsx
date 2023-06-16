@@ -1,9 +1,15 @@
 import React, { Suspense } from "react";
+import Loader from "./Loader";
 
-function lazyLoad(Comp: React.LazyExoticComponent<()=>JSX.Element>) {
+function lazyLoad(
+  ComponentPromise: Promise<{ default: React.ComponentType<object> }>
+) {
+  const LazyComponent = React.lazy(() => ComponentPromise);
+
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Comp />
+    <Suspense fallback={<Loader />}>
+      <Loader />
+      {/* <LazyComponent /> */}
     </Suspense>
   );
 }

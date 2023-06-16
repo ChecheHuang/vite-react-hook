@@ -29,8 +29,11 @@ function Aside() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!user)return
-    setRouterItem(convertRouter(router, accessRoute, user.role));
+    if (!user) return;
+    const menu = convertRouter(router, accessRoute, user.role);
+  
+    setRouterItem(menu);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, accessRoute]);
 
   const handleLink: MenuProps["onClick"] = (e) => {
@@ -67,13 +70,10 @@ function convertRouter(
 ): AntdRouterItem[] {
   return config.reduce((result: AntdRouterItem[], item: RouterItem) => {
     const key = parentKey ? `${parentKey}/${item.path}` : item.path;
-    const hidden =
-      item.hidden ||
-      accessRoute[key]?.hidden ||
-      !accessRoute[key]?.accessRole?.includes(role);
+    const hidden = item.hidden || accessRoute[key]?.hidden
+      || !accessRoute[key]?.accessRole?.includes(role);
 
     if (hidden) {
-      // 如果項目被標記為隱藏，則不包含它
       return result;
     }
 

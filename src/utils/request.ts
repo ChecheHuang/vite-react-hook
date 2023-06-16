@@ -33,10 +33,10 @@ request.interceptors.request.use((config) => {
 //響應攔截
 request.interceptors.response.use((response: AxiosResponse) => {
   //請求後
-  if (response.data.status === "success") {
+  if (response?.data?.status === "success") {
     return response.data;
   }
-  throw new Error("請求錯誤");
+  throw new Error(response.data?.message || "請求錯誤");
 }),
   (error: AxiosError) => {
     return Promise.reject(error);
@@ -58,7 +58,6 @@ export const http: HttpMethodMap = {
   delete: request.delete,
 };
 export default request;
-
 
 // export const http = {
 //   get<T>(url: string, data?: object): Promise<T> {
@@ -89,4 +88,3 @@ export default request;
 //     return request.delete(url, data);
 //   },
 // };
-

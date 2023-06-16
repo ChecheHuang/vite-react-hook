@@ -14,20 +14,17 @@ import useToast from "@/hooks/useToast";
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {showToast} = useToast()
+  const { showToast } = useToast();
   const onFinish = async (values: { username: string; password: string }) => {
     try {
       dispatch(updateStart());
-      const {
-        data,
-      } = await login(values);
-      localStorage.setItem("data", JSON.stringify(data));
+      const { data } = await login(values);
       dispatch(updateSuccess(data));
-      showToast('success','成功登入');
-      navigate("/layout/user");
-    } catch (err) {
+      showToast("success", "成功登入");
+      navigate("/layout/user/user");
+    } catch (err: any) {
       dispatch(updateError());
-      console.error(err);
+      showToast("error", err.message);
     }
   };
 

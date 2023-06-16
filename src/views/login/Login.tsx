@@ -1,5 +1,5 @@
 import React from "react";
-import "./login.scss";
+import styles from "./login.module.scss";
 import Form from "./components/Form.tsx";
 import MyButton, { Request } from "@/components/Button";
 
@@ -7,6 +7,7 @@ const Login: React.FC = () => {
   const request: Request = {
     url: "/test",
     method: "post",
+    data: {},
   };
 
   const handleClick = (result: object, error?: Error): void => {
@@ -18,10 +19,10 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
-      {/* <MyButton request={request} onClick={handleClick} /> */}
-      <div className="login-wrap">
-        <div className="login-form">
+    <div className={styles.loginContainer}>
+      <MyButton request={request} onClick={handleClick} />
+      <div className={styles.loginWrap}>
+        <div className={styles.loginForm}>
           <img
             src="https://www.brandinlabs.com/wp-content/uploads/2014/11/Pizza_Hut_logo.svg_.png"
             alt=""

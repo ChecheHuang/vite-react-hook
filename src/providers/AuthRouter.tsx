@@ -15,27 +15,38 @@ const AuthRouter: React.FC<{ children: JSX.Element }> = ({ children }) => {
   } = useAppSelector((state) => state.token);
 
   useEffect(() => {
-    if (pathname === "/login" && reduxToken) {
-      return navigate("/layout/user");
-    }
-    if (!reduxToken) {
-      return navigate("/login");
-    }
-
-    if (route) {
-      const routeItem = route[pathname];
-      if (
-        typeof routeItem !== "undefined" &&
-        typeof user?.role !== "undefined"
-      ) {
-        const isAllow = routeItem.accessRole?.includes(user.role);
-        if (!isAllow) {
-          showToast("error", "沒有權限訪問");
-          navigate(-1);
+    (async () => {
+      try {
+        if (pathname === "/login" && reduxToken) {
+          return navigate("/layout/user");
         }
+        if (!reduxToken) {
+          return navigate("/login");
+        }
+
+        if (route) {
+          const routeItem = route[pathname];
+          if (
+            typeof routeItem !== "undefined" &&
+            typeof user?.role !== "undefined"
+          ) {
+            const isAllow = routeItem.accessRole?.includes(user.role);
+            if (!isAllow) {
+              await new Promise((resolve) => {
+                showToast("error", "沒有權限訪問");
+                setTimeout(() => {
+                  resolve("");
+                }, 500);
+              });
+              navigate(-1);
+            }
+            setIsLoading(false);
+          }
+        }
+      } catch (error) {
+        console.error(error);
       }
-    }
-    setIsLoading(false);
+    })();
   }, [pathname, route, showToast, user, navigate, reduxToken]);
 
   return <>{isLoading ? <div>Loading</div> : children}</>;

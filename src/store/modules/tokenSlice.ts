@@ -45,11 +45,20 @@ export const tokenSlice = createSlice({
         user?: User;
       }>
     ) {
-      const { token, route, user } = action.payload;
+      const data = action.payload;
+      const { token, route, user }=data;
+      localStorage.setItem("data", JSON.stringify(data));
       state.pending = false;
       state.token = token;
       state.route = route;
       state.user = user;
+    },
+    updateRoute(state,action){
+      const { token, user } = state;
+      const route = action.payload
+      console.log(route);
+      localStorage.setItem("data", JSON.stringify({ token, route, user }));
+      state.route=route
     },
     updateError(state) {
       state.error = true;
@@ -57,5 +66,6 @@ export const tokenSlice = createSlice({
     },
   },
 });
-export const { updateStart, updateSuccess, updateError } = tokenSlice.actions;
+export const { updateStart, updateSuccess, updateError, updateRoute } =
+  tokenSlice.actions;
 export default tokenSlice.reducer;

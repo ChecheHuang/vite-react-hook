@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 interface User {
   id: number;
@@ -23,6 +24,7 @@ function Home() {
   return (
     <div >
       Home
+      <Link to="/login">登入</Link>
       <div>
         {users.map((user) => (
           <div key={user.id}>

@@ -1,27 +1,38 @@
 import Mock from "mockjs";
 
-const route = {
-  "/": { label: "首頁", hidden: false, accessRole: ["USER"] },
-  "/login": { label: "登入頁", hidden: true, accessRole: ["USER"] },
-  "/layout": { label: "控制台", hidden: false, accessRole: ["USER"] },
-  "/layout/user": { label: "使用者", hidden: false, accessRole: ["USER"] },
-  "/layout/user/user": { label: "user", hidden: false, accessRole: ["USER"] },
-  "/layout/home": { label: "home", hidden: false, accessRole: ["USER"] },
+const route: { [key: string]: any } = {
+  "/": { accessRole: ["ADMIN", "USER"] },
+  "/login": { accessRole: ["ADMIN", "USER"] },
+  "/layout": { accessRole: ["ADMIN", "USER"] },
+  "/layout/user": { accessRole: ["ADMIN", "USER"] },
+  "/layout/user/user": { accessRole: ["ADMIN", "USER"] },
+  "/layout/home": { accessRole: ["ADMIN", "USER"] },
+  "/control": { accessRole: ["ADMIN"] },
+  "/control/handle": { accessRole: ["ADMIN"] },
+  "/control/show": { accessRole: ["ADMIN"] },
 };
 
 Mock.mock("/api/route", "post", (options) => {
-  const { route } = JSON.parse(options.body);
-  console.log(route);
+  const { path, user, control } = JSON.parse(options.body);
+  if (control) {
+    route[path]["accessRole"].push(user);
+  } else {
+    route[path]["accessRole"] = route[path]["accessRole"].filter(
+      (item: string) => item !== user
+    );
+  }
+  localStorage.setItem("Mock", JSON.stringify(route));
   return {
     code: 200,
     status: "success",
     message: "成功修改",
+    route,
   };
 });
 
 Mock.mock("/api/login", "post", (options) => {
   const { username, password } = JSON.parse(options.body);
-  if (username === "qwe" && password === "qwe") {
+  if (username && password) {
     return {
       code: 200,
       status: "success",
@@ -30,7 +41,7 @@ Mock.mock("/api/login", "post", (options) => {
         expireTime: Mock.Random.integer(3600, 7200),
         user: {
           username,
-          role: "USER",
+          role: username.toUpperCase(),
         },
         route,
       },
