@@ -8,8 +8,8 @@ function lazyLoad(
 
   return (
     <Suspense fallback={<Loader />}>
-      <Loader />
-      {/* <LazyComponent /> */}
+      {/* <Loader /> */}
+      <LazyComponent />
     </Suspense>
   );
 }

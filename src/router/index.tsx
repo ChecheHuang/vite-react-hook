@@ -59,7 +59,7 @@ export const router: RouterItem[] = [
       {
         path: "handle",
         label: "管理權限",
-        element: lazyLoad(import('@/views/Control/Control')),
+        element: lazyLoad(import("@/views/Control/Control")),
       },
       {
         path: "show",
@@ -76,7 +76,6 @@ export const router: RouterItem[] = [
   },
 ];
 export default router;
-
 
 interface AccessRoles {
   accessRole: string[];
@@ -96,12 +95,12 @@ function processNodes(
       const childPath = obj.path ? `${path}/${obj.path}` : path;
       processNodes(result, child, childPath);
     });
-  } 
-   let fullPath = obj.path ? `${path}/${obj.path}` : path;
-   fullPath = fullPath.replace(/\/+/g, "/");
-   if (!fullPath.includes("*")) {
-     result[fullPath] = { accessRole: ["USER", "ADMIN"] };
-   }
+  }
+  let fullPath = obj.path ? `${path}/${obj.path}` : path;
+  fullPath = fullPath.replace(/\/+/g, "/");
+  if (!fullPath.includes("*")) {
+    result[fullPath] = { accessRole: ["USER", "ADMIN"] };
+  }
 }
 
 function createRoute(data: RouterItem[]): Record<string, AccessRoles> {

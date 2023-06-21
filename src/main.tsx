@@ -6,6 +6,7 @@ import { ConfigProvider } from "antd";
 import { Provider } from "react-redux";
 import store from "@/store";
 import "./index.scss";
+
 (async () => {
   if (import.meta.env.MODE === "mock") {
     // console.log("有引入 mock");

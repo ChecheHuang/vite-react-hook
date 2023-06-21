@@ -20,7 +20,7 @@ const Login: React.FC = () => {
 
   return (
     <div className={styles.loginContainer}>
-      <MyButton request={request} onClick={handleClick} />
+      {/* <MyButton request={request} onClick={handleClick} /> */}
       <div className={styles.loginWrap}>
         <div className={styles.loginForm}>
           <img
